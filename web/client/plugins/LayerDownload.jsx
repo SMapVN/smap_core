@@ -166,17 +166,17 @@ const LayerDownloadPlugin = createPlugin('LayerDownload', {
             Component: LayerDownloadButton,
             position: 11
         },
-        FeatureEditor: {
-            doNotHide: true,
-            name: "LayerDownload",
-            position: 20,
-            target: "toolbar",
-            Component: connect(createStructuredSelector({
-                isDownloadOpen: state =>  state?.controls?.layerdownload?.enabled
-            }), {
-                onClick: () => toggleControl("layerdownload")
-            })(FeatureEditorButton)
-        },
+        // FeatureEditor: {
+        //     doNotHide: true,
+        //     name: "LayerDownload",
+        //     position: 20,
+        //     target: "toolbar",
+        //     Component: connect(createStructuredSelector({
+        //         isDownloadOpen: state =>  state?.controls?.layerdownload?.enabled
+        //     }), {
+        //         onClick: () => toggleControl("layerdownload")
+        //     })(FeatureEditorButton)
+        // },
         MapFooter: {
             doNotHide: true,
             name: "LayerDownload",

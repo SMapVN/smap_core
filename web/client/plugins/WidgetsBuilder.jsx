@@ -153,11 +153,11 @@ export default createPlugin('WidgetsBuilder', {
             Component: WidgetsBuilderButton,
             position: 10
         },
-        FeatureEditor: {
-            doNotHide: true,
-            target: "toolbar",
-            position: 21,
-            Component: FeatureEditorButton
-        }
+        // FeatureEditor: {
+        //     doNotHide: true,
+        //     target: "toolbar",
+        //     position: 21,
+        //     Component: FeatureEditorButton
+        // }
     }
 });
