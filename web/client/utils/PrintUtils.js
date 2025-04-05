@@ -17,7 +17,7 @@ import { extractValidBaseURL } from './TileProviderUtils';
 import { getTileMatrix } from './WMTSUtils';
 import { guessFormat } from './TMSUtils';
 import { get as getProjection } from 'ol/proj';
-import { isArray, filter, find, isEmpty, toNumber, castArray, reverse } from 'lodash';
+import { isArray, filter, find, isEmpty, toNumber, castArray, reverse, includes } from 'lodash';
 import { getFeature } from '../api/WFS';
 import { generateEnvString } from './LayerLocalizationUtils';
 import { ServerTypes } from './LayersUtils';
@@ -38,6 +38,7 @@ import trimEnd from 'lodash/trimEnd';
 
 import { getGridGeoJson } from "./grids/MapGridsUtils";
 import { isImageServerUrl } from './ArcGISUtils';
+import { getWMSLegendConfig, LEGEND_FORMAT } from './LegendUtils';
 
 const defaultScales = getGoogleMercatorScales(0, 21);
 let PrintUtils;
@@ -276,7 +277,7 @@ export const getLayersCredits = (layers) => {
  * @memberof utils.PrintUtils
  */
 export const getMapfishPrintSpecification = (rawSpec, state) => {
-    const {params, ...baseSpec} = rawSpec;
+    const {params, mergeableParams, excludeLayersFromLegend, ...baseSpec} = rawSpec;
     const spec = {...baseSpec, ...params};
     const printMap = state?.print?.map;
     const projectedCenter = reproject(spec.center, 'EPSG:4326', spec.projection);
@@ -290,6 +291,8 @@ export const getMapfishPrintSpecification = (rawSpec, state) => {
         center: projectedCenter,
         scaleZoom: projectedZoom
     };
+    let legendLayers = spec.layers.filter(layer => !includes(excludeLayersFromLegend, layer.name));
+    legendLayers = PrintUtils.getMapfishLayersSpecification(legendLayers, projectedSpec, state, 'legend');
     return {
         "units": getUnits(spec.projection),
         "srs": normalizeSRS(spec.projection || 'EPSG:3857'),
@@ -310,8 +313,9 @@ export const getMapfishPrintSpecification = (rawSpec, state) => {
                 "rotation": !isNil(spec.rotation) ? -Number(spec.rotation) : 0 // negate the rotation value to match rotation in map preview and printed output
             }
         ],
-        "legends": PrintUtils.getMapfishLayersSpecification(spec.layers, projectedSpec, state, 'legend'),
+        "legends": legendLayers,
         "credits": getLayersCredits(spec.layers),
+        ...(mergeableParams ? {mergeableParams} : {}),
         ...params
     };
 };
@@ -606,33 +610,30 @@ export const specCreators = {
                 })
             }
             ))}),
-        legend: (layer, spec) => ({
-            "name": layer.title || layer.name,
-            "classes": [
-                {
-                    "name": "",
-                    "icons": [
-                        PrintUtils.normalizeUrl(layer.url) + url.format({
-                            query: addAuthenticationParameter(PrintUtils.normalizeUrl(layer.url), {
-                                TRANSPARENT: true,
-                                EXCEPTIONS: "application/vnd.ogc.se_xml",
-                                VERSION: "1.1.1",
-                                SERVICE: "WMS",
-                                REQUEST: "GetLegendGraphic",
-                                LAYER: layer.name,
-                                STYLE: layer.style || '',
-                                SCALE: spec.scale,
-                                ...getLegendIconsSize(spec, layer),
-                                LEGEND_OPTIONS: "forceLabels:" + (spec.forceLabels ? "on" : "") + ";fontAntialiasing:" + spec.antiAliasing + ";dpi:" + spec.legendDpi + ";fontStyle:" + (spec.bold && "bold" || (spec.italic && "italic") || '') + ";fontName:" + spec.fontFamily + ";fontSize:" + spec.fontSize,
-                                format: "image/png",
-                                ...(spec.language ? {LANGUAGE: spec.language} : {}),
-                                ...layer?.params
+        legend: (layer, spec) => {
+            const legendOptions = "forceLabels:" + (spec.forceLabels ? "on" : "") + ";fontAntialiasing:" + spec.antiAliasing + ";dpi:" + spec.legendDpi + ";fontStyle:" + (spec.bold && "bold" || (spec.italic && "italic") || '') + ";fontName:" + spec.fontFamily + ";fontSize:" + spec.fontSize;
+            return {
+                "name": layer.title || layer.name,
+                "classes": [
+                    {
+                        "name": "",
+                        "icons": [
+                            PrintUtils.normalizeUrl(layer.url) + url.format({
+                                query: addAuthenticationParameter(PrintUtils.normalizeUrl(layer.url), {
+                                    ...getWMSLegendConfig({layer, legendOptions, mapBbox: spec.bbox, mapSize: spec.size, projection: spec.projection, format: LEGEND_FORMAT.IMAGE}),
+                                    TRANSPARENT: true,
+                                    EXCEPTIONS: "application/vnd.ogc.se_xml",
+                                    VERSION: "1.1.1",
+                                    SCALE: spec.scale,
+                                    ...getLegendIconsSize(spec, layer),
+                                    ...(spec.language ? {LANGUAGE: spec.language} : {})
+                                })
                             })
-                        })
-                    ]
-                }
-            ]
-        })
+                        ]
+                    }
+                ]
+            };
+        }
     },
     vector: {
         map: (layer, spec) => ({
