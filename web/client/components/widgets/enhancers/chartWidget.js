@@ -35,7 +35,7 @@ export default compose(
         }))
     ),
     editableWidget(),
-    exportableWidget(),
+    // exportableWidget(),
     defaultIcons(),
     branch(
         ({showTable}) => !showTable,

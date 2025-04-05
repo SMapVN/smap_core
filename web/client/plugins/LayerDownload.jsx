@@ -159,41 +159,41 @@ const LayerDownloadPlugin = createPlugin('LayerDownload', {
         onClose: () => toggleControl("layerdownload")
     })(DownloadDialog),
     containers: {
-        TOC: {
-            doNotHide: true,
-            name: "LayerDownload",
-            target: 'toolbar',
-            Component: LayerDownloadButton,
-            position: 11
-        },
-        FeatureEditor: {
-            doNotHide: true,
-            name: "LayerDownload",
-            position: 20,
-            target: "toolbar",
-            Component: connect(createStructuredSelector({
-                isDownloadOpen: state =>  state?.controls?.layerdownload?.enabled
-            }), {
-                onClick: () => toggleControl("layerdownload")
-            })(FeatureEditorButton)
-        },
-        MapFooter: {
-            doNotHide: true,
-            name: "LayerDownload",
-            position: 1,
-            tool: connect(createStructuredSelector({
-                active: exportDataResultsControlEnabledSelector,
-                showInfoBubble: showInfoBubbleSelector,
-                infoBubbleMessage: infoBubbleMessageSelector,
-                checkingExportDataEntries: checkingExportDataEntriesSelector,
-                results: exportDataResultsSelector,
-                currentLocale: currentLocaleSelector
-            }), {
-                onToggle: toggleControl.bind(null, 'exportDataResults', 'enabled'),
-                onActive: checkExportDataEntries,
-                onRemoveResult: removeExportDataResult
-            })(ExportDataResultsComponent)
-        }
+        // TOC: {
+        //     doNotHide: true,
+        //     name: "LayerDownload",
+        //     target: 'toolbar',
+        //     Component: LayerDownloadButton,
+        //     position: 11
+        // },
+        // FeatureEditor: {
+        //     doNotHide: true,
+        //     name: "LayerDownload",
+        //     position: 20,
+        //     target: "toolbar",
+        //     Component: connect(createStructuredSelector({
+        //         isDownloadOpen: state =>  state?.controls?.layerdownload?.enabled
+        //     }), {
+        //         onClick: () => toggleControl("layerdownload")
+        //     })(FeatureEditorButton)
+        // },
+        // MapFooter: {
+        //     doNotHide: true,
+        //     name: "LayerDownload",
+        //     position: 1,
+        //     tool: connect(createStructuredSelector({
+        //         active: exportDataResultsControlEnabledSelector,
+        //         showInfoBubble: showInfoBubbleSelector,
+        //         infoBubbleMessage: infoBubbleMessageSelector,
+        //         checkingExportDataEntries: checkingExportDataEntriesSelector,
+        //         results: exportDataResultsSelector,
+        //         currentLocale: currentLocaleSelector
+        //     }), {
+        //         onToggle: toggleControl.bind(null, 'exportDataResults', 'enabled'),
+        //         onActive: checkExportDataEntries,
+        //         onRemoveResult: removeExportDataResult
+        //     })(ExportDataResultsComponent)
+        // }
     },
     epics,
     reducers: {
