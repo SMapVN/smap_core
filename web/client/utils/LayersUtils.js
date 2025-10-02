@@ -22,6 +22,7 @@ import { addAuthenticationParameter } from './SecurityUtils';
 import { getEPSGCode } from './CoordinatesUtils';
 import { ANNOTATIONS, updateAnnotationsLayer, isAnnotationLayer } from '../plugins/Annotations/utils/AnnotationsUtils';
 import { getLocale } from './LocaleUtils';
+import { has, includes, indexOf } from 'lodash';
 
 let LayersUtils;
 
@@ -94,7 +95,7 @@ const addBaseParams = (url, params) => {
 const isSupportedLayerFunc = (layer, maptype) => {
     const LayersUtil = require('./' + maptype + '/Layers');
     const Layers = LayersUtil.default || LayersUtil;
-    if (layer.type === "mapquest" || layer.type === "bing") {
+    if (layer.type === "mapquest") {
         return Layers.isSupported(layer.type) && layer.apiKey && layer.apiKey !== "__API_KEY_MAPQUEST__" && !layer.invalid;
     }
 
@@ -709,6 +710,7 @@ export const saveLayer = (layer) => {
         expanded: layer.expanded || false
     },
     layer?.enableInteractiveLegend !== undefined ? { enableInteractiveLegend: layer?.enableInteractiveLegend } : {},
+    layer?.enableDynamicLegend !== undefined ? { enableDynamicLegend: layer?.enableDynamicLegend } : {},
     layer.sources ? { sources: layer.sources } : {},
     layer.heightOffset ? { heightOffset: layer.heightOffset } : {},
     layer.params ? { params: layer.params } : {},
@@ -1154,6 +1156,20 @@ export const flattenGroups = (groups, idx = 0, wholeGroup = false) => {
         }
         return acc;
     }, []);
+};
+
+/**
+ * Validates if a background layer is compatible with the given projection
+ * @param {Object} background - The background layer object
+ * @param {string} projection - The CRS projection to validate
+ * @returns {boolean} True if the background layer is valid/compatible
+ */
+export const isBackgroundCompatibleWithProjection = (background, projection) => {
+    const compatibleCrs = ['EPSG:4326', 'EPSG:3857', 'EPSG:900913'];
+    const validCrs = indexOf(compatibleCrs, projection) > -1;
+    const compatibleWmts = background.type === "wmts" && has(background.allowedSRS, projection);
+    const valid = ((validCrs || compatibleWmts || includes(["wms", "empty", "osm", "tileprovider"], background.type)) && !background.invalid );
+    return valid;
 };
 
 LayersUtils = {

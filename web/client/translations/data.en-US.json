@@ -419,7 +419,8 @@
       "locales_combo": "Language:",
       "featuredMaps": "Featured",
       "groupmanagerTab": "Groups",
-      "usermanagerTab": "Users"
+      "usermanagerTab": "Users",
+      "tagsmanagerTab": "Tags"
     },
     "newMap": "New map",
     "newMapEmpty": "Empty map",
@@ -544,7 +545,8 @@
           "sunlightOption": "Sunlight",
           "dateTimeOption": "Specific UTC Date-Time",
           "dateTimePlaceholder": "Select the dateTime"
-        }
+        },
+        "collisionDetection": "Enable terrain collision detection"
       },
       "thumbnailError": {
         "error403": "You are not allowed to update the thumbnail",
@@ -984,7 +986,11 @@
         "showTooltipActive": "Show advanced filters (active)",
         "hideTooltip": "Hide advanced filters",
         "hideTooltipActive": "Hide advanced filters (active)"
-      }
+      },
+      "searching": "Searching...",
+      "noResultsFound": "No results found",
+      "searchByLocationName": "Search by location name...",
+      "addDestination": "Add Destination"
     },
     "draw": {
       "fill": "Fill",
@@ -1423,6 +1429,7 @@
       "inactive": "Inactive"
     },
     "usergroups": {
+      "title": "Manage Groups",
       "searchGroups": "Search groups...",
       "groups": "Groups",
       "nameLimit": "The name is limited to 255 characters.",
@@ -1533,7 +1540,7 @@
       "title": "Snapshot Preview",
       "save": "Save",
       "tooltip": "Save a snapshot of the map.",
-      "googleBingError": "Google and Bing layers are not available for the snapshot, due to copyright restrictions.",
+      "googleError": "Google layers are not available for the snapshot, due to copyright restrictions.",
       "downloadingSnapshots": "pending snapshot generation",
       "date": "Date",
       "layers": "Layers",
@@ -2133,6 +2140,7 @@
           "useTheSelectedLayer": "Use the selected layer",
           "connectToAMap": "Connect to another widget",
           "connectToTheMap": "Connect to the map",
+          "connectToTheTable": "Connect to the table",
           "selectMapToConnect": "Select the widget to connect",
           "clearConnection": "Clear connection",
           "disableConnectToMap": "Operation unavailable",
@@ -2355,7 +2363,8 @@
           "category": "Category",
           "log": "Log",
           "date": "Date"
-        }
+        },
+        "showCurrentTime": "Show current time on the axis"
       },
       "tray": {
         "title": "Widgets",
@@ -2773,7 +2782,8 @@
       "minSourceValue": "Minimum source data value",
       "maxSourceValue": "Maximum source data value",
       "customParams": "Custom Parameters",
-      "wrongFormatMsg": "The entered configuration is in wrong format !!"
+      "wrongFormatMsg": "The entered configuration is in wrong format !!",
+      "style": "Style"
     },
     "playback": {
       "settings": {
@@ -3306,7 +3316,44 @@
       "addTooltip": "Add new background",
       "editTooltip": "Edit background",
       "deleteTooltip": "Delete background",
-      "confirmDelete": "Are you sure you want to delete \"{title}\" background?"
+      "addTerrainTooltip": "Add new terrain",
+      "editTerrainTooltip": "Edit terrain",
+      "deleteTerrainTooltip": "Delete terrain",
+      "confirmDelete": "Are you sure you want to delete \"{title}\" background?",
+      "backgroundIncompatibleTooltip": "This background layer is not compatible with the current map projection",
+      "terrain": {
+        "placeholders": {
+          "titleLabel": "Enter title ...",
+          "urlLabel": "Enter URL ...",
+          "assetId": "Enter asset ID ...",
+          "accessToken": "Enter access token ...",
+          "server": "Enter server ...",
+          "layernameLabel": "Enter Layer name ..."
+        },
+        "invalidUrl": "The provided url is invalid",
+        "mainTitle": "Terrains",
+        "title": "Add new terrain",
+        "providerLabel": "Provider",
+        "titleLabel": "Title",
+        "cesiumProvider": {
+          "urlLabel": "URL",
+          "label": "Cesium"
+        },
+        "cesiumIonProvider": {
+          "label": "Cesium Ion",
+          "assetId": "Asset ID",
+          "accessToken": "Access Token",
+          "server": "Server"
+        },
+        "wmsProvider": {
+          "label": "WMS",
+          "urlLabel": "URL",
+          "layernameLabel": "Layer Name",
+          "projectionLabel": "Projection",
+          "wmsVersionLabel": "WMS Version"
+        },
+        "add": "Add"
+      }
     },
     "stepper": {
       "back": "Back",
@@ -3534,6 +3581,14 @@
       "Language": {
         "description": "This plugin allows to change the language of the app",
         "title": "Language"
+      },
+      "Itinerary": {
+        "description": "This plugin allows to create itineraries on the map",
+        "title": "Itinerary"
+      },
+      "Isochrone": {
+        "description": "This plugin allows to calculate isochrones and isodistances",
+        "title": "Isochrone"
       }
     },
     "contextCreator": {
@@ -4354,6 +4409,10 @@
         "noPublicContentTitle": "Featured Resources",
         "noPublicContentContent": "This catalog doesn't have featured resources."
       },
+      "groupsSection": {
+        "noContentYetTitle": "No user groups",
+        "noContentYetContent": "There are no user groups. Click on \"New Group\" to create one"
+      },
       "mapsFilter": "Maps",
       "dashboardsFilter": "Dashboards",
       "geostoriesFilter": "Geostories",
@@ -4462,7 +4521,7 @@
       "tagName": "Name",
       "tagDescription": "Description",
       "tagColor": "Color",
-      "manageTags": "Manage tags",
+      "manageTags": "Manage Tags",
       "errorLoadingTags": "It is not possible to load tags",
       "errorUpdatingTag": "It is not possible to update the tag",
       "errorTagNameAlreadyExist": "The tag you are trying to create already exists",
@@ -4473,6 +4532,80 @@
       "documentation": "Documentation",
       "filterApplied": "Filter applied",
       "emptyFilterItems": "No items to display"
+    },
+    "itinerary": {
+      "title": "Itinerary",
+      "tooltip": "Itinerary",
+      "mode": "Travel Mode",
+      "modeTooltip": "Choose a travel mode for the itinerary",
+      "optimize": "Optimize",
+      "optimizeRoute": "Optimize Route",
+      "optimizeTooltip": "Enable to reorder points for the fastest route (limited by Route Optimization API)",
+      "avoid": "Avoid",
+      "avoidTooltip": "Toggle options to avoid certain roads",
+      "motorway": "Motorways & Highways",
+      "trunk": "Trunk Roads & Major Arterials",
+      "ferry": "Ferry Crossings",
+      "tunnel": "Tunnels & Underground Passages",
+      "bridge": "Bridges & Elevated Roads",
+      "run": "Run",
+      "viaRoute": "via {routeName}",
+      "clickOnMap": "Click on map to select a location",
+      "exportAsGeoJSON": "Export as GeoJSON",
+      "addAsLayer": "Add as layer",
+      "routeItineraries": "Route Itineraries",
+      "goThroughRoundabout": "Go through roundabout(s)",
+      "reset": "Reset",
+      "notification": {
+        "error": "Itinerary Error",
+        "errorItineraryError": "An error occurred while calculating the itinerary. Please try again...",
+        "infoLayerAdded": "Itinerary added as layer"
+      },
+      "togglePointTooltip": "Toggle coordinates editor",
+      "toggleSearchTooltip": "Toggle search by location name",
+      "removeWaypointTooltip": "Remove waypoint"
+    },
+    "isochrone": {
+      "title": "Isochrone",
+      "tooltip": "Isochrone",
+      "modeTooltip": "Choose a travel mode for the Isochrone/Isodistance",
+      "rangeByTooltip": "Choose <i>distance</i> for <b>Isodistance</b> or <i>time</i> for <b>Isochrone</b> as the basis for the range",
+      "clickOnMap": "Click on map to select a location",
+      "coordinateTooltip": "Toggle coordinates editor",
+      "searchTooltip": "Search by location name",
+      "searching": "Searching...",
+      "newSearch": "New search",
+      "bucketsTooltip": "Defines the number of intervals to calculate within the chosen range. Max is 4.",
+      "noResultsFound": "No results found",
+      "searchByLocationName": "Search by location name...",
+      "mode": "Travel Mode",
+      "rangeBy": "Range by",
+      "departure": "Departure",
+      "arrival": "Arrival",
+      "direction": "Direction",
+      "reset": "Reset",
+      "run": "Run",
+      "buckets": "Buckets",
+      "exportAsGeoJSON": "Export as GeoJSON",
+      "addAsLayer": "Add as layer",
+      "deleteResult": "Delete result",
+      "distance": "Distance",
+      "time": "Time",
+      "useRunParameters": "Use run parameters",
+      "notification": {
+        "error": "Isochrone Error",
+        "errorIsochroneError": "An error occurred while calculating the isochrone. Please try again...",
+        "infoLayerAdded": "Isochrone layer added"
+      },
+      "colors": "Colors",
+      "rampTooltip": "Choose the color ramp for the buckets",
+      "colorTooltip": "Choose the color for the bucket",
+      "confirmDialog": {
+        "title": "Close Isochrone Panel",
+        "description": "You have existing isochrone data. Closing the panel will clear all current run data. Are you sure you want to continue?",
+        "confirm": "Confirm",
+        "cancel": "Cancel"
+      }
     }
   }
 }
